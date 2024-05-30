@@ -1,0 +1,30 @@
+DFA的五元组表示，数据：第一组为映射，第二组是开始状态，第三组为终止状态集合
+7
+S a A
+S b B
+A a Z
+A b B
+B a A
+B b Z
+Z a Z
+1
+S
+1
+Z
+12
+S 0 V
+S 0 M
+S 1 M
+S 1 U
+V 0 Z
+M 0 M
+M 0 V
+M 1 M
+M 1 U
+U 1 Z
+Z 0 Z
+Z 1 Z
+1
+S
+1
+Z

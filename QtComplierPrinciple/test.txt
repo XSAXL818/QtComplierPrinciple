@@ -1,0 +1,17 @@
+i*i+i*(i+i)
+i+i+((i)+(i*i))
+i *i + i+i * i
+i*i+i*(ii)
+i*i+i(i+i)
+(i
+(i+i)*(i
+((i)i)
+
+a*b/b+a
+a*b*b/b/a
+a+b*b/a
+a**b/b+a
+a*b*b//b/a
+a+b*b/aa
+
+aadbbbl

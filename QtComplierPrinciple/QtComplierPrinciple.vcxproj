@@ -15,8 +15,7 @@
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
-    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')"
-      >$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -46,11 +45,8 @@
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
-  <Target Name="QtMsBuildNotFound"
-    BeforeTargets="CustomBuild;ClCompile"
-    Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
-    <Message Importance="High"
-      Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
   </Target>
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
@@ -67,6 +63,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -75,7 +76,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -96,12 +97,61 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="QtComplierPrinciple.qrc"/>
-    <QtUic Include="QtComplierPrinciple.ui"/>
-    <QtMoc Include="QtComplierPrinciple.h"/>
-    <ClCompile Include="QtComplierPrinciple.cpp"/>
-    <ClCompile Include="main.cpp"/>
-
+    <QtRcc Include="QtComplierPrinciple.qrc" />
+    <QtUic Include="QtComplierPrinciple.ui" />
+    <QtMoc Include="QtComplierPrinciple.h" />
+    <ClCompile Include="GrammarLib\CPPUtil.cpp" />
+    <ClCompile Include="GrammarLib\FAUtil.cpp" />
+    <ClCompile Include="GrammarLib\FIRST.cpp" />
+    <ClCompile Include="GrammarLib\FirstUtil.cpp" />
+    <ClCompile Include="GrammarLib\FOLLOW.cpp" />
+    <ClCompile Include="GrammarLib\FollowUTIL.cpp" />
+    <ClCompile Include="GrammarLib\Grammar.cpp" />
+    <ClCompile Include="GrammarLib\GUtil.cpp" />
+    <ClCompile Include="GrammarLib\LEXUtil.cpp" />
+    <ClCompile Include="GrammarLib\OPGUtil.cpp" />
+    <ClCompile Include="GrammarLib\RDUtil.cpp" />
+    <ClCompile Include="GrammarLib\UI.cpp" />
+    <ClCompile Include="LRUtil.cpp" />
+    <ClCompile Include="QtComplierPrinciple.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GrammarLib\CPPUtil.h" />
+    <ClInclude Include="GrammarLib\FAUtil.h" />
+    <ClInclude Include="GrammarLib\FIRST.h" />
+    <ClInclude Include="GrammarLib\FirstUtil.h" />
+    <ClInclude Include="GrammarLib\FOLLOW.h" />
+    <ClInclude Include="GrammarLib\FollowUtil.h" />
+    <ClInclude Include="GrammarLib\Grammar.h" />
+    <ClInclude Include="GrammarLib\GUtil.h" />
+    <ClInclude Include="GrammarLib\LEXUtil.h" />
+    <ClInclude Include="GrammarLib\OPGUtil.h" />
+    <ClInclude Include="GrammarLib\RDUtil.h" />
+    <ClInclude Include="LRUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GrammarLib\a.exe" />
+    <None Include="GrammarLib\regular.l" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="GrammarLib\DFAInput.txt" />
+    <Text Include="GrammarLib\DFAOutput.txt" />
+    <Text Include="GrammarLib\function.txt" />
+    <Text Include="GrammarLib\input.txt" />
+    <Text Include="GrammarLib\labelOutPut.txt" />
+    <Text Include="GrammarLib\Lexinput.txt" />
+    <Text Include="GrammarLib\Lexoutput.txt" />
+    <Text Include="GrammarLib\LL1input.txt" />
+    <Text Include="GrammarLib\myLib.txt" />
+    <Text Include="GrammarLib\NFAInput.txt" />
+    <Text Include="GrammarLib\NFAOutput.txt" />
+    <Text Include="GrammarLib\NoSimplificationDFA.txt" />
+    <Text Include="GrammarLib\output.txt" />
+    <Text Include="GrammarLib\test.txt" />
+    <Text Include="GrammarLib\toQt.txt" />
+    <Text Include="GrammarLib\yyout.txt" />
+    <Text Include="LRTable.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

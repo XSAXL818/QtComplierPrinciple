@@ -1,8 +1,4 @@
-#include "QtComplierPrinciple.h"
-#include <QtWidgets/QApplication>
-
 #include<iostream>
-#include<stdio.h>
 #include <Windows.h>
 #include<vector>
 #include<algorithm>
@@ -13,19 +9,14 @@
 #include<string>
 #include <cstdlib>
 #include <filesystem>
-#include <thread>
-#include "GrammarLib/Grammar.h"
-#include"GrammarLib/GUtil.h"
-#include"GrammarLib/UI.h"
-#include"GrammarLib/FAUtil.h"
-#include"GrammarLib/RDUtil.h"
-#include"GrammarLib/CPPUtil.h"
-#include"GrammarLib/LEXUtil.h"
-#include"GrammarLib/OPGUtil.h"
-#include"LRUtil.h"
-//#include <qthread.h>
-
-
+#include"Grammar.h"
+#include"GUtil.h"
+#include"UI.h"
+#include"FAUtil.h"
+#include"RDUtil.h"
+#include"CPPUtil.h"
+#include"LEXUtil.h"
+#include"OPGUtil.h"
 
 using namespace std;
 
@@ -38,21 +29,13 @@ void f5(Grammar& g);
 void f6(Grammar& g);
 void f7(GrammarPlus& g);
 
-void cmdPro();
+//int funcID = 5;
 
+int main() {
+	/*bool b1 = true;
+	bool b2 = true;
+	cout << b1 + b2 << endl;*/
 
-int main(int argc, char *argv[])
-{
-	thread t1(cmdPro);
-	t1.detach();
-    QApplication a(argc, argv);
-    QtComplierPrinciple w;
-    w.show();
-    return a.exec();
-}
-void cmdPro() {
-	Sleep(1000);
-	SetConsoleOutputCP(CP_UTF8);
 	vector<Grammar > grammars;
 	vector< string > func;
 	vector<NFA> nfas;
@@ -61,12 +44,21 @@ void cmdPro() {
 	UI::readFunction(func, "function.txt");
 	FAUtil::readDFA(dfas, "DFAInput.txt");
 	FAUtil::readNFA(nfas, "NFAInput.txt");
+
 	GrammarPlus gp;
 	gp.productions = grammars[8].productions;
 	gp.start = grammars[8].start;
-	set<string> terms{ "if", "else", "then", ";", "e", "a" };
+	set<string> terms{ "if", "else", "then", ";", "e", "a"};
 	gp.terms = terms;
+	/*gp.nons = grammars[8].nons;
+	for (char c : grammars[8].terms) {
+		string t = "";
+		t += c;
+		gp.terms.insert(t);
+	}*/
+
 	while (1) {
+
 		int sel;
 		while (1) {
 			cout << endl << "--------输入1进入操作界面，0摇滚出界面----------" << endl;
@@ -75,13 +67,13 @@ void cmdPro() {
 				break;
 			}
 			else {
-				return;
+				return 0;
 			}
 		}
-
+		
 		pair<int, int> op = UI::select(grammars, func);
 		if (op.first == -1) {
-			return;
+			return 0;
 		}
 		if (op.first > grammars.size()) {
 			cout << "请选择正确的文法！" << endl;
@@ -101,7 +93,7 @@ void cmdPro() {
 			f3(dfas);
 			break;
 		case 4:// NFA转换为DFA
-			f4(nfas, dfas);
+			f4(nfas,dfas);
 			break;
 		case 5:// 递归下降分析
 			f5(grammars[op.first]);
@@ -115,8 +107,11 @@ void cmdPro() {
 		default:
 			cout << "请输入正确的功能编号！" << endl;
 		}
+
 	}
+	return 0;
 }
+
 
 void f0(Grammar& g) {
 	PUTIL::labelMethod(g.productions);
@@ -140,7 +135,7 @@ void f1(Grammar& g) {
 	}
 	terms.push_back("$");
 	vector<ProductionFirst> vpf;
-	map<LL1Key, string> LL1Table = PUTIL::getLL1Table(vpf, g.productions, terms);
+	map<LL1Key,string> LL1Table = PUTIL::getLL1Table(vpf,g.productions, terms);
 
 	cout << "LL1语法分析表如下：" << endl;
 	PUTIL::printLL1Table(LL1Table, g.productions, terms);
@@ -153,7 +148,7 @@ void f1(Grammar& g) {
 		cin >> op;
 		//getchar();
 		cin.get(c);
-		if (op == 1) {
+		if(op == 1) {
 			while (1) {
 				cout << "请输入待推导的的句子：(输入@退出)" << endl;
 				getline(cin, juzi);
@@ -169,7 +164,7 @@ void f1(Grammar& g) {
 				}
 				PUTIL::topToBottom(juzi, LL1Table, g.productions, terms);
 			}
-
+			
 		}
 		else if (op == 2) {
 			FILE* fp;
@@ -208,20 +203,20 @@ void f3(vector<DFA>& dfas) {
 	while (1) {
 		FAUtil::printDFAs(dfas);
 		cout << "请输入<DFA编号,字符>进行操作，输入-1退出程序" << endl;
-		int opID = -1;
+		int opID=-1;
 		string str;
 		cin >> opID;
 		cout << "opID: " << opID;
-		if (opID == -1 || opID < 0 || opID > dfas.size()) {
+		if (opID == -1 || opID < 0 || opID > dfas.size() ) {
 			break;
 		}
 		else {
 			cin >> str;
 			FAUtil::DFADerivedSentence(dfas[opID], str);
 		}
-
+		
 	}
-
+	
 }
 void f4(vector<NFA>& nfas, vector<DFA>& dfas) {
 	while (1) {
@@ -235,7 +230,7 @@ void f4(vector<NFA>& nfas, vector<DFA>& dfas) {
 		}
 		DFA dfa = FAUtil::NFAToDFA(nfas[opID]);
 		string output = "DFAOutput.txt";
-		cout << "DFA已输出到文件" << output << "中" << endl;
+		cout << "DFA已输出到文件" << output <<"中" << endl;
 		dfa.fwriteDFA(output.c_str());
 		dfas.push_back(dfa);
 	}
@@ -315,7 +310,7 @@ void f5(Grammar& g) {
 		string op;
 		cin >> op;
 		string para = "";
-		if (op == "1") {
+		if ( op == "1") {
 			// 词法分析器将文件Lexinput.txt中的源码分割成单词,并写入文件Lexoutput.txt中
 			LEX(para);
 			// 获取词法分析器分割的单词
@@ -338,8 +333,8 @@ void f5(Grammar& g) {
 				// 改造字串，使符合要求
 				int index = para.find('*', 0);
 				while (index != -1) {
-					para.insert(index, "\\\\");
-					index = para.find('*', index + 3);
+					para.insert(index,"\\\\");
+					index = para.find('*', index+3);
 				}
 				//para = "\"" + para + "\"";
 				//cout << "转义后" << para << endl;
@@ -362,7 +357,7 @@ void f5(Grammar& g) {
 		else {
 			break;
 		}
-	}
+	}	
 }
 void f6(Grammar& grammar) {
 	cout << "----------------求解FIRSTTERM中------------------" << endl;
@@ -370,14 +365,14 @@ void f6(Grammar& grammar) {
 	cout << "----------------求解LASTTERM中------------------" << endl;
 	vector<LastTerm> last = OPGUtil::getLastTerm(grammar);
 	cout << "----------------求解算符优先表中------------------" << endl;
-	map<pair<char, char>, char> table = OPGUtil::getTable(grammar, first, last);
+	map<pair<char, char>, char> table = OPGUtil::getTable(grammar,first,last);
 	map<pair<char, char>, char> noTable = OPGUtil::getTableNo(grammar, first, last);
 	cout << "算符优先矩阵：\n";
 	OPGUtil::printOPGTable(grammar, table);
 	grammar.terms.erase('#');
 	cout << "----------------求解算符优先表中------------------" << endl;
 	static map<pair<char, char>, int> fgTable = OPGUtil::getFGTable(noTable, grammar);
-	cout << endl << "优先函数表如下:" << endl;
+	cout << endl<<  "优先函数表如下:" << endl;
 	OPGUtil::printFGTable(grammar, fgTable);
 	grammar.terms.insert('#');
 	map<string, char> proToLeftTable = OPGUtil::getProToLeftTable(grammar);
@@ -397,7 +392,6 @@ void f6(Grammar& grammar) {
 			}
 			if (OPGUtil::isSentence(grammar.start, juzi, table, proToLeftTable) == ISSENTENCE) {
 				cout << "这是个句子\n";
-				//CreateProcess();
 				system("\"D:\\Code\\CCode\\VS\\QtProject\\OPG\\x64\\Debug\\OPG.exe\"");
 			}
 			else {
@@ -409,18 +403,33 @@ void f6(Grammar& grammar) {
 			grammar.terms.erase('#');
 			cout << "算符优先矩阵：\n";
 			OPGUtil::printOPGTable(grammar, noTable);
-			OPGUtil::warShall(noTable, grammar);
+			OPGUtil::warShall(noTable,grammar);
 		}
 		else {
 			break;
 		}
-
+		
 	}
+	/*while (1) {
+		cout << "算符优先矩阵：\n";
+		OPGUtil::printOPGTable(grammar, table);
+		string juzi;
+		cout << "请输入一个句子：(输入#退出)\n";
+		cin >> juzi;
+		if (juzi == "#") {
+			break;
+		}
+		else {
+			if (OPGUtil::isJuzi(grammar.start,juzi, table)) {
+				cout << "这是个句子\n";
+			}
+			else {
+				cout << "这不是个句子\n";
+			}
+		}
+	}*/
 }
 
 void f7(GrammarPlus& gp) {
-	vector<char> terms;
-	vector<char> nons;
-	map<LRKey,string> table = LRUtil::loadLRTable(terms, nons);
-	LRUtil::printLRTable(terms, nons, table, 12);
+	
 }

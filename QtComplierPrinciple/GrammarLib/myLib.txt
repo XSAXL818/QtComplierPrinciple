@@ -1,0 +1,17 @@
+void Error(){
+	cout << "已匹配的字串为：{";
+	for( int i = 0; i < currIndex; i++ ){
+		cout << symbols[i] << ",";
+	}
+	cout << "}\n";
+	cout << sym << "不能匹配"<< endl;
+
+	exit(1);
+}
+void GetSymbol(){
+	currIndex++;
+	if( currIndex == symbols.size()){
+		Error();
+	}
+	sym = symbols[currIndex];
+}

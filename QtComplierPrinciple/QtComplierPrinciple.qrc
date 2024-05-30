@@ -1,4 +1,20 @@
 <RCC>
-    <qresource prefix="QtComplierPrinciple">
+    <qresource prefix="/icons">
+        <file>icons/grammar_new.png</file>
+        <file>icons/grammar_open.png</file>
+        <file>icons/grammar_save.png</file>
+        <file>icons/run.png</file>
+        <file>icons/grammar.png</file>
+        <file>icons/file.png</file>
+        <file>icons/folder.png</file>
+        <file>icons/dragon.png</file>
+        <file>icons/loongLogo.png</file>
+        <file>icons/dragon32.png</file>
+        <file>icons/dragon32_1.png</file>
+        <file>icons/loongLogo32.png</file>
+        <file>icons/deleteGrammar.png</file>
+        <file>icons/newGrammar.png</file>
+        <file>icons/saveGrammar.png</file>
+        <file>icons/selectAllGrammar.png</file>
     </qresource>
 </RCC>

@@ -1,0 +1,10 @@
+if b1 and b2 then
+	a;
+	a
+else 
+	if b2 or b3 then
+		a
+	else 
+		a;
+		if (b3 or b4 ) and b5 then
+			a

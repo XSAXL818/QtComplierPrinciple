@@ -21,6 +21,15 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Header Files\GrammrLib">
+      <UniqueIdentifier>{812230ed-5826-4233-ab98-f423fc77322e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GrammarLib">
+      <UniqueIdentifier>{e16db96d-4407-469d-9f3a-a245230afa06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\GrammarResource">
+      <UniqueIdentifier>{390ab692-52a0-49f2-ad68-bf8553ba6d31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="QtComplierPrinciple.qrc">
@@ -35,14 +44,146 @@
     <ClCompile Include="QtComplierPrinciple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ResourceCompile Include="$pro_name$.rc">
-    </ResourceCompile>
-    <None Include="$pro_name$.ico">
-      <Filter>Resource Files</Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\CPPUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\FAUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\FIRST.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\FirstUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\FOLLOW.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\FollowUTIL.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\GUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\Grammar.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\LEXUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="LRUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\OPGUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\UI.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammarLib\RDUtil.cpp">
+      <Filter>Source Files\GrammarLib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GrammarLib\CPPUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\FAUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\FIRST.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\FirstUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\FOLLOW.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\Grammar.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\FollowUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\GUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\LEXUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="LRUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\OPGUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarLib\RDUtil.h">
+      <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GrammarLib\a.exe">
+      <Filter>Resource Files\GrammarResource</Filter>
     </None>
-    <None Include="$pro_name$.def">
-      <Filter>Resource Files</Filter>
+    <None Include="GrammarLib\regular.l">
+      <Filter>Resource Files\GrammarResource</Filter>
     </None>
-
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="LRTable.txt" />
+    <Text Include="GrammarLib\DFAInput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\DFAOutput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\function.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\labelOutPut.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\input.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\Lexinput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\LL1input.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\Lexoutput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\myLib.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\NFAOutput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\NFAInput.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\NoSimplificationDFA.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\output.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\test.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\yyout.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
+    <Text Include="GrammarLib\toQt.txt">
+      <Filter>Resource Files\GrammarResource</Filter>
+    </Text>
   </ItemGroup>
 </Project>
