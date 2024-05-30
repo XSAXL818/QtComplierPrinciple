@@ -88,6 +88,9 @@
     <ClCompile Include="GrammarLib\RDUtil.cpp">
       <Filter>Source Files\GrammarLib</Filter>
     </ClCompile>
+    <ClCompile Include="Callback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GrammarLib\CPPUtil.h">
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="GrammarLib\RDUtil.h">
       <Filter>Header Files\GrammrLib</Filter>
+    </ClInclude>
+    <ClInclude Include="Callback.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

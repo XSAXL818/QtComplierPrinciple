@@ -15,16 +15,16 @@
 #include <filesystem>
 #include <thread>
 #include "GrammarLib/Grammar.h"
-#include"GrammarLib/GUtil.h"
-#include"GrammarLib/UI.h"
-#include"GrammarLib/FAUtil.h"
-#include"GrammarLib/RDUtil.h"
-#include"GrammarLib/CPPUtil.h"
-#include"GrammarLib/LEXUtil.h"
-#include"GrammarLib/OPGUtil.h"
-#include"LRUtil.h"
-//#include <qthread.h>
-
+#include "GrammarLib/GUtil.h"
+#include "GrammarLib/UI.h"
+#include "GrammarLib/FAUtil.h"
+#include "GrammarLib/RDUtil.h"
+#include "GrammarLib/CPPUtil.h"
+#include "GrammarLib/LEXUtil.h"
+#include "GrammarLib/OPGUtil.h"
+#include "LRUtil.h"
+#include <functional>
+#include "Callback.h"
 
 
 using namespace std;
@@ -38,11 +38,32 @@ void f5(Grammar& g);
 void f6(Grammar& g);
 void f7(GrammarPlus& g);
 
-void cmdPro();
 
+
+void cmdPro();
+void Callback::myCallbackFunction() {
+	cmdPro();
+}
+
+vector<Grammar > grammars;
+vector< string > func;
+vector<NFA> nfas;
+vector<DFA> dfas;
+GrammarPlus gp;
 
 int main(int argc, char *argv[])
 {
+	SetConsoleOutputCP(CP_UTF8);
+	PUTIL::readGrammar(grammars, "input.txt");
+	UI::readFunction(func, "function.txt");
+	FAUtil::readDFA(dfas, "DFAInput.txt");
+	FAUtil::readNFA(nfas, "NFAInput.txt");
+	GrammarPlus gp;
+	gp.productions = grammars[8].productions;
+	gp.start = grammars[8].start;
+	set<string> terms{ "if", "else", "then", ";", "e", "a" };
+	gp.terms = terms;
+
 	thread t1(cmdPro);
 	t1.detach();
     QApplication a(argc, argv);
@@ -51,9 +72,11 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 void cmdPro() {
-	Sleep(1000);
-	SetConsoleOutputCP(CP_UTF8);
-	vector<Grammar > grammars;
+	
+	/*Callback::myCallbackFunction(cmdPro);*/
+	//Sleep(1000);
+	//SetConsoleOutputCP(CP_UTF8);
+	/*vector<Grammar > grammars;
 	vector< string > func;
 	vector<NFA> nfas;
 	vector<DFA> dfas;
@@ -65,11 +88,11 @@ void cmdPro() {
 	gp.productions = grammars[8].productions;
 	gp.start = grammars[8].start;
 	set<string> terms{ "if", "else", "then", ";", "e", "a" };
-	gp.terms = terms;
+	gp.terms = terms;*/
 	while (1) {
 		int sel;
 		while (1) {
-			cout << endl << "--------输入1进入操作界面，0摇滚出界面----------" << endl;
+			cout << endl << "--------输入1进入命令行操作界面，0摇滚出界面----------" << endl;
 			cin >> sel;
 			if (sel == 1) {
 				break;
@@ -118,6 +141,7 @@ void cmdPro() {
 	}
 }
 
+
 void f0(Grammar& g) {
 	PUTIL::labelMethod(g.productions);
 	cout << "----------加标记法处理结果如下：(输出文件为labelOutPut.txt)" << endl;
@@ -160,12 +184,12 @@ void f1(Grammar& g) {
 				if (juzi == "@") {
 					break;
 				}
-				int index = juzi.find(' ', 0);
+				int index = (int)juzi.find(' ', 0);
 				while (index != -1) {
 					juzi.erase(index, 1);
 					juzi.insert(index, "@");
 					index++;
-					index = juzi.find(' ', index);
+					index = (int)juzi.find(' ', index);
 				}
 				PUTIL::topToBottom(juzi, LL1Table, g.productions, terms);
 			}
@@ -336,10 +360,10 @@ void f5(Grammar& g) {
 					break;
 				}
 				// 改造字串，使符合要求
-				int index = para.find('*', 0);
+				int index = (int)para.find('*', 0);
 				while (index != -1) {
 					para.insert(index, "\\\\");
-					index = para.find('*', index + 3);
+					index = (int)para.find('*', index + 3);
 				}
 				//para = "\"" + para + "\"";
 				//cout << "转义后" << para << endl;

@@ -100,6 +100,7 @@
     <QtRcc Include="QtComplierPrinciple.qrc" />
     <QtUic Include="QtComplierPrinciple.ui" />
     <QtMoc Include="QtComplierPrinciple.h" />
+    <ClCompile Include="Callback.cpp" />
     <ClCompile Include="GrammarLib\CPPUtil.cpp" />
     <ClCompile Include="GrammarLib\FAUtil.cpp" />
     <ClCompile Include="GrammarLib\FIRST.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Callback.h" />
     <ClInclude Include="GrammarLib\CPPUtil.h" />
     <ClInclude Include="GrammarLib\FAUtil.h" />
     <ClInclude Include="GrammarLib\FIRST.h" />

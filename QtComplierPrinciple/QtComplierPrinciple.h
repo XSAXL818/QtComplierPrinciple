@@ -19,7 +19,7 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qtextstream.h> 
-
+#include "Callback.h"
 
 
 
@@ -33,7 +33,7 @@ public:
 
 private:
     //Ui::QtComplierPrincipleClass ui;
-    //std::vector<Grammar> vgfile;
+    std::vector<Grammar> grammars;
     //std::vector<QString> vfileName;
     int currFile = 0;
     int currFloder = 0;
@@ -46,9 +46,17 @@ private slots:
     void on_actNewGrammar_triggered();
     void on_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
-
+    /// <summary>
+    /// listItem的单击事件：选中某项，将其放入到当前项中
+    /// </summary>
+    /// <param name="itme"></param>
+    /// <param name="column"></param>
+    void on_listWidget_itemClicked(QListWidgetItem* item);
 private:
 
+    std::string cmdStr;
+    std::vector<std::string> cmdVStr;
+    // 默认目录
     const QString defalutDir = R"(C:\Grammar\)";
 
     // 查询 给定目录下的一级的所有.txt文件,并加入到tree中
@@ -57,5 +65,19 @@ private:
     void loadDefalutGrammar();
     // 读取文件的所有内容
     QString readFile(const QString& filePath);
-
+    /// <summary>
+    /// 将文法的产生式转换为QString
+    /// </summary>
+    /// <param name="g"></param>
+    /// <returns></returns>
+    QString getQStringFromGrammar(Grammar g);
+    std::vector<std::string> getVStringFromGrammar(Grammar g);
+    /// <summary>
+    /// 传入要打印的字符串，然后让cmd回到相应的函数中
+    /// </summary>
+    void callCmd(std::string s);
+    void callCmd(std::vector<std::string>& vs);
+public:
+   
+    void performAction(Callback::CallbackType callback);
 };
