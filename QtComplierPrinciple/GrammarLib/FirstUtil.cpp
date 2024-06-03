@@ -32,7 +32,7 @@ void FirstUtil::getFirst(vector<Production>& vp, vector<RecordFirst>& vrf, vecto
 		printRecordFirst(vrf);*/
 		// 第一步,删除可直接求出FIRST的非终结符，并将入到vsf和vpf中
 		pair< vector<SymbolFirst>, vector<ProductionFirst> > p = moveNoDependent(vrf);
-		int start = vsf.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
+		int start = (int)vsf.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
 		for (int i = 0; i < p.first.size(); i++) {
 			sig[p.first[i].left] = start + i;
 		}

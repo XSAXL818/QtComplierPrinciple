@@ -105,7 +105,7 @@ void RDGrammar::printRDGrammar() {
 	cout << "规则集: \n";
 	for (map<string, vector< vector<SignType> > >::iterator it = regulars.begin(); it != regulars.end(); it++) {
 		cout << it->first << " ::= ";
-		int blankSize = it->first.size() + 5;
+		int blankSize = (int)it->first.size() + 5;
 		string blank(blankSize, ' ');
 		for (vector<vector<SignType> >::iterator it1 = it->second.begin(); it1 != it->second.end(); it1++) {
 			for (vector<SignType>::iterator it2 = it1->begin(); it2 != it1->end(); it2++) {
@@ -130,7 +130,7 @@ void RDGrammar::printRDGrammar() {
 	cout << "\n带符号类型的规则集打印: \n";
 	for (map<string, vector< vector<SignType> > >::iterator it = regulars.begin(); it != regulars.end(); it++) {
 		cout << it->first << " ::= ";
-		int blankSize = it->first.size()+5;
+		int blankSize = (int)it->first.size()+5;
 		string blank(blankSize, ' ');
 		for (vector<vector<SignType> >::iterator it1 = it->second.begin(); it1 != it->second.end(); it1++) {
 			for (vector<SignType>::iterator it2 = it1->begin(); it2 != it1->end(); it2++) {

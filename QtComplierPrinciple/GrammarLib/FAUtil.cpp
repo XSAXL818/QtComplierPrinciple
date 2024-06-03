@@ -946,7 +946,7 @@ void NFA::fwriteNFA(string filePath){
 	}
 	int size = 0;
 	for (map< DFAKey, set<string> >::iterator it1 = mapTable.begin(); it1 != mapTable.end(); it1++) {
-		size += it1->second.size();
+		size += (int)it1->second.size();
 	}
 	fprintf(fp, "%d\n", size);
 	for (map< DFAKey, set<string> >::iterator it1 = mapTable.begin(); it1 != mapTable.end(); it1++) {

@@ -132,7 +132,6 @@ void QtComplierPrinciple::on_actDeleteGrammar_triggered(){
     callCmd("文法删除功能待实现....");
     //ui.listWidget->removeItemWidget(ui.listWidget->currentItem());
     if (ui.listWidget->selectedItems().size() == ui.listWidget->count()) {// 全选
-        std::cout << "全选\n";
         for (int i = ui.listWidget->count()-1; i >= 0; --i) {
             delete ui.listWidget->takeItem(i);
             
@@ -150,7 +149,9 @@ void QtComplierPrinciple::on_actDeleteGrammar_triggered(){
 }
 // 全选
 void QtComplierPrinciple::on_actSelectAllGrammar_triggered(){
+    callCmd("文法全选功能");
     ui.actDeleteGrammar->setEnabled(true);
+
     QItemSelectionModel* model = ui.listWidget->selectionModel();
     model->select(
         QItemSelection(

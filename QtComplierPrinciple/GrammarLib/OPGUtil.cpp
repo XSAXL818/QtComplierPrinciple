@@ -78,7 +78,7 @@ vector<FirstTerm> OPGUtil::getFirstTerm(Grammar& g) {
 			}
 			cout << endl;
 		}
-		int start = vft.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
+		int start= (int)vft.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
 		for (int i = 0; i < newVft.size(); i++) {
 			sig[newVft[i].left] = start + i;
 		}
@@ -114,7 +114,7 @@ vector<LastTerm> OPGUtil::getLastTerm(Grammar& g) {
 			}
 			cout << endl;
 		}
-		int start = vft.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
+		int start = (int)vft.size();// 标记已求出FIRST的非终结符，及其所在vsf中的位置
 		for (int i = 0; i < newVft.size(); i++) {
 			sig[newVft[i].left] = start + i;
 		}
@@ -374,7 +374,7 @@ void OPGUtil::generateRecordLastTerm(vector<Production>& vp, vector<RecordFirstT
 			// 将产生式转换为字符数组
 			vector<string> rights = PUTIL::getRightsFromPro(right);
 			// 开始下标
-			int start = rights.size() - 1;
+			int start = (int)rights.size() - 1;
 			// 判断后两个字符，将最后一个终结符加入到LASTTERM中，如果最后一个字符时非终结符则加入蕴含关系
 			if (PUTIL::isNon(rights[start])) {// 非终结符
 				rft.dependent = rights[start];
@@ -556,10 +556,10 @@ bool OPGUtil::isJuzi(string start, string juzi, map<pair<char, char>, char>& tab
 				// 设置栈中第一个终结符的下标
 				string t;
 				if (PUTIL::isNon( s2+t)) {// 不是非终结符
-					firstTerm = sym.size() - 2;
+					firstTerm = (int)sym.size() - 2;
 				}
 				else {
-					firstTerm = sym.size() - 1;
+					firstTerm = (int)sym.size() - 1;
 				}
 				currentIndex++;
 
@@ -571,7 +571,7 @@ bool OPGUtil::isJuzi(string start, string juzi, map<pair<char, char>, char>& tab
 					pattern = pattern + sym.back();
 					sym.pop_back();
 				}
-				firstTerm = sym.size() - 2;
+				firstTerm = (int)sym.size() - 2;
 				t = "";
 				while (op.back() == '=' || PUTIL::isNon(t+sym.back())) {
 					pattern = pattern + sym.back();
@@ -581,7 +581,7 @@ bool OPGUtil::isJuzi(string start, string juzi, map<pair<char, char>, char>& tab
 				char newNon = start[0];
 				sym.push_back(newNon);
 				cout << pattern << "->" << newNon;
-				firstTerm = sym.size() - 2;
+				firstTerm = (int)sym.size() - 2;
 			}
 			else {// 表出错
 				cout << "存在不属于<=>关系:" << sym[firstTerm] << "->" << juzi[currentIndex] << endl;
@@ -661,7 +661,7 @@ ERRORTYPE OPGUtil::isSentence(string start, string juzi, map<pair<char, char>, c
 			if (it->second == '<' || it->second == '=') {
 				symbols.push_back(it->first.second);
 				relation.push_back(it->second);
-				firstTerm = symbols.size() - 1;
+				firstTerm = (int)symbols.size() - 1;
 				current++;
 				fprintf(fp,"$");
 			}
@@ -676,7 +676,7 @@ ERRORTYPE OPGUtil::isSentence(string start, string juzi, map<pair<char, char>, c
 				cout << phase;
 				fprintf(fp, "%s",phase.c_str());
 				// 找到符号栈的第一个终结符,不可能出现两个相连的非终结符，且最后一个符号是终结符
-				firstTerm = symbols.size() - 2;
+				firstTerm = (int)symbols.size() - 2;
 			}
 			else {// 处理错误关系
 				error = NONEXISTENTRELATIONSHIP;
@@ -811,7 +811,7 @@ ERRORTYPE OPGUtil::isSentencePlus(Grammar& g, string start, string juzi, map<pai
 			if (it->second == '<' || it->second == '=') {
 				symbols.push_back(it->first.second);
 				relation.push_back(it->second);
-				firstTerm = symbols.size() - 1;
+				firstTerm = (int)symbols.size() - 1;
 				current++;
 			}
 			else if (it->second == '>') {
@@ -825,7 +825,7 @@ ERRORTYPE OPGUtil::isSentencePlus(Grammar& g, string start, string juzi, map<pai
 				symbols.push_back(newNon);
 				cout << phase;
 				// 找到符号栈的第一个终结符,不可能出现两个相连的非终结符，且最后一个符号是终结符
-				firstTerm = symbols.size() - 2;
+				firstTerm = (int)symbols.size() - 2;
 			}
 			else {// 处理错误关系
 				error = NONEXISTENTRELATIONSHIP;
@@ -880,7 +880,7 @@ void OPGUtil::warShall(map<pair<char, char>, char>& table, Grammar& g) {
 	vector<char> terms = { '+','*','(',')','i'};
 	printMatrix1();*/
 	solveWarshall(m, termIndex);
-	int n = g.terms.size() * 2;
+	int n = (int)g.terms.size() * 2;
 	for (int i = 0; i < n; i++) {
 		m[i][i] = true;
 	}
@@ -921,7 +921,7 @@ void OPGUtil::warShall(map<pair<char, char>, char>& table, Grammar& g) {
 	cout << endl;
 }
 void OPGUtil::solveWarshall(vector<vector<bool>>& m, map<char, int>& termIndex) {
-	int n = termIndex.size() * 2;
+	int n = (int)termIndex.size() * 2;
 	for (int col = 0; col < n; col++) {
 		for (int row = 0; row < n; row++) {
 			if (m[row][col] == true) {
@@ -981,7 +981,7 @@ void OPGUtil::printMatrix(vector<vector<bool>>& m, set<char>& terms) {
 
 void OPGUtil::initMatrix(map<pair<char, char>, char>& table, Grammar& g, vector<vector<bool>>& m, map<char, int>& termIndex) {
 	int index = 0;
-	int n = g.terms.size();
+	int n = (int)g.terms.size();
 	// 终结符的排序
 	cout << "终结符: ";
 	for (char c : g.terms) {
@@ -1020,7 +1020,7 @@ bool OPGUtil::includeTerm(string pro) {
 			return true;
 		}
 	}
-	false;
+	return false;
 }
 pair<string, char> OPGUtil::stringToPro(map<string, char>& table, string regular) {
 	for (pair<string, char> p : table) {
