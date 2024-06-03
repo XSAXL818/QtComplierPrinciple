@@ -1,4 +1,6 @@
+#include "QtComplierPrinciple.h"
 #include "GUtil.h"
+
 
 
 void PUTIL::printGrammar(Grammar& grammar) {
@@ -240,7 +242,6 @@ void PUTIL::printNonHaveNull(vector<Production>& vp) {
 map<LL1Key,string>  PUTIL::getLL1Table(vector<ProductionFirst>& vpf,vector<Production>& vp, vector<string>& terms) {
 	vector<RecordFirst> vrf;
 	vector<SymbolFirst> vsf;
-	//vector<ProductionFirst> vpf;
 	cout << "********************获取FRIST表开始**************" << endl;
 	FirstUtil::getFirst(vp, vrf, vsf, vpf);
 	cout << "********************获取FRIST表结束**************" << endl;
@@ -260,39 +261,8 @@ map<LL1Key,string>  PUTIL::getLL1Table(vector<ProductionFirst>& vpf,vector<Produ
 	for (int i = 0; i < productions.size(); i++) {
 		cout << i << " " << productions[i] << endl;
 	}
-
-
-	///新增
-	/*for (int i = 0; i < vpf.size() - 1; i++) {
-		set<string> newFirst{};
-		string pro = productions[vpf[i].proID];
-		vector<string> vs = getRightsFromPro(pro);
-		bool allNon = true;
-		for (int j = 0; j < vs.size(); j++) {
-			if (isNon(vs[j])) {
-				int smIndex = findSymbolFirstByLeft(vsf, vs[j]);
-				newFirst.insert(vsf[smIndex].firstSet.begin(), vsf[smIndex].firstSet.end());
-				if (newFirst.find("@") == newFirst.end()) {
-					allNon = false;
-				}
-			}
-			else {
-				allNon = false;
-			}
-			if (!allNon) {
-				break;
-			}
-		}
-		vpf[i].firstSet = newFirst;
-	}*/
-
-
 	cout << "产生式的FIRST：" << endl;
 	FirstUtil::printGrammarFirst(vpf);
-
-	
-	///
-	
 	// 获取LL1Table分析预测表
 	return initLL1Table( vp, productions, terms, vsf, vpf, vsfo);
 }
@@ -417,7 +387,7 @@ void PUTIL::labelMethod(vector<Production>& vp) {
 		labelMethod(vp);
 	}
 	else {
-		cout << "***********加标记法处理结束***************" << endl;
+		
 	}
 }
 // findProduction:按照left查找 
@@ -738,7 +708,7 @@ bool PUTIL::isNon(char c) {
 /// <param name="LL1Table">分析预测表</param>
 /// <param name="vp">产生式表</param>
 /// <param name="terms">终结符表</param>
-void PUTIL::topToBottom(string src, map<LL1Key,string>& LL1, vector<Production>& vp, vector<string>& terms) {
+string PUTIL::topToBottom(string src, map<LL1Key,string>& LL1, vector<Production>& vp, vector<string>& terms) {
 	// 输入的字串以$结尾，且输入字母表中无$。
 	src += "$";
 	stack<string> s;
@@ -799,9 +769,11 @@ void PUTIL::topToBottom(string src, map<LL1Key,string>& LL1, vector<Production>&
 	}
 	if (currentIndex != src.size()) {
 		cout << "推导出错,这不是一个句子!" << endl;
+		return "推导出错,这不是一个句子!";
 	}
 	else {
 		cout << "这是一个句子。" << endl;
+		return "这是一个句子。";
 	}
 }
 

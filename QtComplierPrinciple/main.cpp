@@ -42,7 +42,8 @@ void f7(GrammarPlus& g);
 
 void cmdPro();
 void Callback::myCallbackFunction() {
-	cmdPro();
+	//cmdPro();
+	cout << endl << "--------输入1进入命令行操作界面，0摇滚出界面----------" << endl;
 }
 
 vector<Grammar > grammars;
@@ -101,7 +102,6 @@ void cmdPro() {
 				return;
 			}
 		}
-
 		pair<int, int> op = UI::select(grammars, func);
 		if (op.first == -1) {
 			return;
@@ -144,6 +144,7 @@ void cmdPro() {
 
 void f0(Grammar& g) {
 	PUTIL::labelMethod(g.productions);
+	cout << "\n***********加标记法处理结束***************" << endl;
 	cout << "----------加标记法处理结果如下：(输出文件为labelOutPut.txt)" << endl;
 	PUTIL::fixNumber(g.productions);
 	PUTIL::printGrammar(g);
@@ -152,10 +153,8 @@ void f0(Grammar& g) {
 }
 
 void f1(Grammar& g) {
-
 	cout << "所选文法为：\n";
 	PUTIL::printGrammar(g);
-
 	vector<string> terms;
 	for (set<char>::iterator it = g.terms.begin(); it != g.terms.end(); it++) {
 		string t = "";
@@ -211,8 +210,6 @@ void f1(Grammar& g) {
 				PUTIL::topToBottomNoProcess(line, LL1Table, g.productions, terms);
 
 			}
-
-
 			fclose(fp);
 		}
 		else if (op == 3) {

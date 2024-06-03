@@ -1,6 +1,5 @@
 #include "OPGUtil.h"
 
-
 RecordFirstTerm::RecordFirstTerm() {
 	proID = -1;
 	firstSet.clear();
@@ -546,9 +545,6 @@ bool OPGUtil::isJuzi(string start, string juzi, map<pair<char, char>, char>& tab
 			cout << juzi[i];
 		}
 		cout << "\t\t";
-		
-
-
 		map<pair<char, char>, char>::iterator it = table.find({ sym[firstTerm],juzi[currentIndex] });
 		if (it != table.end()) {// 表中存在关系
 			char s1 = it->first.first;
@@ -623,10 +619,7 @@ bool OPGUtil::isJuzi(string start, string juzi, map<pair<char, char>, char>& tab
 ERRORTYPE OPGUtil::isSentence(string start, string juzi, map<pair<char, char>, char>& table, map<string, char>& proToLeftTable)
 {
 	FILE* fp;
-//D:\Code\CCode\VS\QtProject\OPG\x64\Debug
-	//fopen_s(&fp,"..\\QtProject\\OPG\\x64\\Debug\\toQt.txt", "w");
-	//fopen_s(&fp,"toQt.txt", "w");
-	fopen_s(&fp, R"(D:\Code\CCode\VS\QtProject\QtComplierPrinciple\x64\Debug\toQt.txt)", "w");
+	fopen_s(&fp, R"(C:\Grammar\ToQtText\toQt.txt)", "w");
 	start = "N";
 	// 初始化
 	ERRORTYPE error = ISSENTENCE;
@@ -640,9 +633,11 @@ ERRORTYPE OPGUtil::isSentence(string start, string juzi, map<pair<char, char>, c
 	cout << "步骤\t栈\t关系\t下一个符号\t其余输入部分\t最左质短语\n";
 	fprintf(fp, "步骤\t栈\t关系\t下一个符号\t其余输入部分\t最左质短语\n");
 	while (1) {
+		// 步骤
 		fprintf(fp,"%d\t",cnt);
 		cout << cnt++ << "\t";
 		for (int i = 0; i < symbols.size(); i++) {
+			// 打印栈
 			cout << symbols[i];
 			fprintf(fp, "%c",symbols[i]);
 		}
@@ -702,14 +697,21 @@ ERRORTYPE OPGUtil::isSentence(string start, string juzi, map<pair<char, char>, c
 		
 		}
 	}
-	fprintf(fp, "%d\t",cnt);
-	cout << cnt++ << "\t";
-	for (char c : symbols){
-		cout << c;
-		fprintf(fp, "%c",c);
+	if (error == ISSENTENCE) {
+		fprintf(fp, "%d\t", cnt);
+		cout << cnt++ << "\t";
+		for (char c : symbols) {
+			cout << c;
+			fprintf(fp, "%c", c);
+		}
+		cout << "\t\t#\t\t\t\t\n";
+		fprintf(fp, "\t$\t#\t\t$\t\t$\n");
 	}
-	cout << "\t\t#\t\t\t\t\n";
-	fprintf(fp, "\t$\t#\t\t$\t\t$\n");
+	else {
+		cout << "不存在关系\n";
+		fprintf(fp, "不存在关系\n");
+	}
+	
 	if (start[0] != symbols[1]) {
 		error = NOTSTARTCHAR;
 	}

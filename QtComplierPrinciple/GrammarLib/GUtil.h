@@ -63,7 +63,7 @@ public:
 	/// <param name="LL1Table"></param>
 	/// <param name="vp"></param>
 	/// <param name="terms"></param>
-	static void topToBottom(string src, map<LL1Key, string>& LL1, vector<Production>& vp, vector<string>& terms);
+	static string topToBottom(string src, map<LL1Key, string>& LL1, vector<Production>& vp, vector<string>& terms);
 	static void topToBottomNoProcess(string src, map<LL1Key, string>& LL1, vector<Production>& vp, vector<string>& terms);
 
 	/// <summary>

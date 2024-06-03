@@ -14,6 +14,10 @@
 #include <qtoolbutton.h>
 #include <Callback.h>
 #include <thread>
+#include <qitemselectionmodel.h>
+#include "GrammarLib/OPGUtil.h"
+#include <GrammarLib/FAUtil.h>
+
 
 QtComplierPrinciple::QtComplierPrinciple(QWidget *parent)
     : QMainWindow(parent)
@@ -27,20 +31,21 @@ QtComplierPrinciple::QtComplierPrinciple(QWidget *parent)
     ui.toolBar->addAction(actNew);*/
 
     // 插入运行功能
-    QComboBox* comboFuncBox = new QComboBox(this);
+    comboFuncBox = new QComboBox(this);
     comboFuncBox->setMinimumWidth(150);
     comboFuncBox->setMinimumHeight(40);
     QFont font = comboFuncBox->font();
     font.setPointSize(14);
     comboFuncBox->setFont(font);
-    comboFuncBox->addItem("加标记法处理");
-    comboFuncBox->addItem("LL1自顶向下推导");
-    comboFuncBox->addItem("消除左递归");
-    comboFuncBox->addItem("DFA推导");
-    comboFuncBox->addItem("NFA转换为DFA");
-    comboFuncBox->addItem("递归下降分析");
-    comboFuncBox->addItem("算符优先算法");
-    comboFuncBox->addItem("LR识别句子");
+    comboFuncBox->addItem("加标记法处理");    // 0
+    comboFuncBox->addItem("LL1自顶向下推导"); // 1
+    comboFuncBox->addItem("消除左递归");      // 2
+    comboFuncBox->addItem("DFA推导");         // 3
+    comboFuncBox->addItem("NFA转换为DFA");    // 4
+    comboFuncBox->addItem("递归下降分析");    // 5
+    comboFuncBox->addItem("算符优先算法识别句子");// 6
+    comboFuncBox->addItem("算符优先符表转化为FG优先函数(Warshall)");//7
+    comboFuncBox->addItem("LR识别句子");// 8
     ui.toolBar->addWidget(comboFuncBox);
 
     /*QPushButton* btn_run = new QPushButton(this);
@@ -80,6 +85,10 @@ QtComplierPrinciple::QtComplierPrinciple(QWidget *parent)
         //"    background-color: #c8e0df;"
         "}"
     );
+    // 设置QLineEdit的样式表
+    ui.lineEdit->setStyleSheet(
+        "QLineEdit { border: 1px solid black }"
+    );
 
     //设置GroupBox
     ui.groupBox->setStyleSheet("QGroupBox { padding: 0px; margin: 0px; }");
@@ -94,36 +103,265 @@ QtComplierPrinciple::QtComplierPrinciple(QWidget *parent)
 
     
     //connect(ui.actOpenFolder, &QAction::triggered, this, &QtComplierPrinciple::on_actOpenFolder_triggered, Qt::UniqueConnection);
+    //connect(ui.checkBox, &QCheckBox::checkStateChanged, this, &QtComplierPrinciple::on_checkBox_checkStateChanged);
+        
 }
-
-QtComplierPrinciple::~QtComplierPrinciple(){
-
+// 文法可编辑状态改变
+void QtComplierPrinciple::on_checkBox_checkStateChanged(Qt::CheckState checked) {
+    //ui.textEdit->setEnabled(checked);
+    ui.textEdit->setReadOnly(!checked);
+    //ui.actSaveGrammar->setEnabled(!checked);
 }
-
-void QtComplierPrinciple::on_actNewGrammar_triggered(){
-    std::cout << "自动连接\n";
-}
-
-void QtComplierPrinciple::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column){
-    if (item->parent() == NULL) {
-        //std::cout << "不存在父项\n";
+// 文法内容改变
+void QtComplierPrinciple::on_textEdit_textChanged(){
+    // 判断可编辑选项是否选中，如果未选中说明是第一次加载文法，无需开启save动作
+    if (ui.checkBox->isChecked()) {
+        ui.actSaveGrammar->setEnabled(true);
         return;
     }
-    // 获取文件目录及名称
-    /*QString folder = item->parent()->text(0);
-    QString name = item->text(0);
-    QFileInfo info(folder +"\\" + name);
-    std::cout << "文件的绝对路径: " << info.absoluteFilePath().toStdString();*/
+    ui.actSaveGrammar->setEnabled(false);
+}
+// 保存文法点击
+void QtComplierPrinciple::on_actSaveGrammar_triggered(){
+    callCmd("文法保存功能待实现....");
+    ui.actSaveGrammar->setEnabled(false);
+}
+
+// 删除
+void QtComplierPrinciple::on_actDeleteGrammar_triggered(){
+    callCmd("文法删除功能待实现....");
+    //ui.listWidget->removeItemWidget(ui.listWidget->currentItem());
+    if (ui.listWidget->selectedItems().size() == ui.listWidget->count()) {// 全选
+        std::cout << "全选\n";
+        for (int i = ui.listWidget->count()-1; i >= 0; --i) {
+            delete ui.listWidget->takeItem(i);
+            
+        }
+        ui.textEdit->clear();
+        return;
+    }
+    delete ui.listWidget->takeItem(ui.listWidget->currentRow());
+    ui.listWidget->reset();
+    //ui.listWidget->setCurrentRow(0);
+    ui.textEdit->clear();
+    ui.checkBox->setChecked(false);
+    ui.checkBox->setEnabled(false);
+   
+}
+// 全选
+void QtComplierPrinciple::on_actSelectAllGrammar_triggered(){
+    ui.actDeleteGrammar->setEnabled(true);
+    QItemSelectionModel* model = ui.listWidget->selectionModel();
+    model->select(
+        QItemSelection(
+            ui.listWidget->model()->index(0, 0), ui.listWidget->model()->index(ui.listWidget->count() - 1, 0)
+        )
+        , QItemSelectionModel::Select
+    );
+}
+
+void QtComplierPrinciple::on_actRun_triggered(){
+    switch ( comboFuncBox->currentIndex() ){
+    case 0:
+        qf0();
+        break;
+    case 1:
+        qf1();
+        Callback::myCallbackFunction();
+        break;
+    case 2:
+        qf2();
+        break;
+    case 3:
+        qf3();
+        break;
+    case 4:
+        qf4();
+        break;
+    case 5:
+        qf5();
+        break;
+    case 6:
+        qf6();
+        break;
+    case 7:
+        qf7();
+        break;
+    case 8:
+        break;
+    default:
+        break;
+    }
+    
+}
+
+void startQTable() {
+    system("\"D:\\Code\\CCode\\VS\\QtProject\\OPG\\x64\\Debug\\OPG.exe\"");
+}
+
+void QtComplierPrinciple::qf0(){
+    Grammar& g = grammars[ui.listWidget->currentRow()];
+    PUTIL::labelMethod(g.productions);
+    PUTIL::fixNumber(g.productions);
+    ui.textEdit->setText(getQStringFromGrammar(g));
+    callCmd("加标记法处理.......");
+}
+
+void QtComplierPrinciple::qf1() {
+    // 获取文法
+    Grammar& g = grammars[ui.listWidget->currentRow()];
+    // 打印文法
+    cmdVStr.clear();
+    cmdVStr.push_back(getQStringFromGrammar(g).toStdString());
+    // 将终结符转换为字符串，历史遗留问题：没有时间实现类似 if 是终结符的功能来识别句子
+    vector<string> terms;
+    for (set<char>::iterator it = g.terms.begin(); it != g.terms.end(); it++) {
+        string t = "";
+        t += *it;
+        terms.push_back(t);
+    }
+    terms.push_back("$");
+    vector<ProductionFirst> vpf;
+    // 获取LL1Table表
+    cmdVStr.push_back("打开 LL1语法分析表 GUI");
+    map<LL1Key, string> LL1Table = PUTIL::getLL1Table(vpf, g.productions, terms);
+
+    FILE* fp;
+    fopen_s(&fp, toQtFilePath.c_str(), "w");
+    if (fp == NULL) {
+        cout << "\n文件问找到！\n";
+        return;
+    }
+    fprintf(fp, "\n");
+
+    // 打印到文件中
+    fprintf(fp, "$");
+    for (string item : terms) {
+        fprintf(fp, "\t%s", item.c_str());
+    }
+    fprintf(fp, "\n");
+    for (int i = 0; i < g.productions.size(); i++) {
+        fprintf(fp, "%s", g.productions[i].left.c_str());
+        for (int j = 0; j < terms.size(); j++) {
+            map<LL1Key, string>::iterator it = LL1Table.find(LL1Key(g.productions[i].left, terms[j][0]));
+            if (it != LL1Table.end()) {
+                fprintf(fp, "\t%s", it->second.c_str());
+            }
+            else {
+                fprintf(fp, "\t$");
+            }
+        }
+        fprintf(fp, "\n");
+    }
+
+    PUTIL::printLL1Table(LL1Table, g.productions, terms);
+    string juzi = ui.lineEdit->text().toStdString();
+    if (juzi == "@") {
+        return;
+    }
+    string ret = PUTIL::topToBottom(juzi, LL1Table, g.productions, terms);
+    // 展示LL1分析表GUI
+    fprintf(fp, "%s", ret.c_str());
+    fclose(fp);
+    std::thread t1(startQTable);
+    t1.detach();
+
+}
+void QtComplierPrinciple::qf2() {
+    Grammar& g = grammars[ui.listWidget->currentRow()];
+    callCmd("消除左递归处理中");
+    PUTIL::EliminateLeftRecursion(g.productions);
+    PUTIL::fixNumber(g.productions);
+    ui.textEdit->setText(getQStringFromGrammar(g));
+}
+void QtComplierPrinciple::qf3() {
+    /*while (1) {
+        FAUtil::printDFAs(dfas);
+        cout << "请输入<DFA编号,字符>进行操作，输入-1退出程序" << endl;
+        int opID = -1;
+        string str;
+        cin >> opID;
+        cout << "opID: " << opID;
+        if (opID == -1 || opID < 0 || opID > dfas.size()) {
+            break;
+        }
+        else {
+            cin >> str;
+            FAUtil::DFADerivedSentence(dfas[opID], str);
+        }
+
+    }*/
+}
+void QtComplierPrinciple::qf4() {
+
+}
+void QtComplierPrinciple::qf5() {
+
+}
+
+void QtComplierPrinciple::qf6() {
+    Grammar& grammar = grammars[ui.listWidget->currentRow()];
+    cmdVStr.clear();
+    cmdVStr.push_back("----------------求解FIRSTTERM中------------------");
+    vector<FirstTerm> first = OPGUtil::getFirstTerm(grammar);
+    cmdVStr.push_back("----------------求解LASTTERM中------------------");
+    vector<LastTerm> last = OPGUtil::getLastTerm(grammar);
+    cmdVStr.push_back("----------------求解算符优先表中------------------");
+    map<pair<char, char>, char> table = OPGUtil::getTable(grammar, first, last);
+    map<pair<char, char>, char> noTable = OPGUtil::getTableNo(grammar, first, last);
+    cmdVStr.push_back("算符优先矩阵：");
+    OPGUtil::printOPGTable(grammar, table);
+    map<string, char> proToLeftTable = OPGUtil::getProToLeftTable(grammar);
+    grammar.terms.insert('#');
+    string juzi = ui.lineEdit->text().toStdString();
+    juzi += "#";
+    if (juzi == "#") {
+        return;
+    }
+    if (OPGUtil::isSentence(grammar.start, juzi, table, proToLeftTable) == ISSENTENCE) {
+        cout << "这是个句子\n";
+        std::thread t1(startQTable);
+        t1.detach();
+        /*system("\"D:\\Code\\CCode\\VS\\QtProject\\OPG\\x64\\Debug\\OPG.exe\"");*/
+    }
+    else {
+        cout << "这不是个句子\n";
+        std::thread t1(startQTable);
+        t1.detach();
+        /*system("\"D:\\Code\\CCode\\VS\\QtProject\\OPG\\x64\\Debug\\OPG.exe\"");*/
+    }
+}
+void QtComplierPrinciple::qf7() {
+
+}
+
+QtComplierPrinciple::~QtComplierPrinciple(){}
+// 新增文法文件
+void QtComplierPrinciple::on_actNewGrammarFile_triggered(){
+    std::cout << "自动连接\n";
+}
+// treeItem的单击事件
+void QtComplierPrinciple::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column){
+  
 }
 
 // 文法文件的双击事件
 void QtComplierPrinciple::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column) {
+    // 清空ListWidget
+    ui.listWidget->clear();
     // cmd打印缓冲区
     cmdVStr.clear();
     // 如果是目录文件，无操作
     if (item->parent() == nullptr) {
+        ui.toolBar_2->setEnabled(false);
         return;
     }
+    // 打开文法操作
+    ui.toolBar_2->setEnabled(true);
+    ui.actAddGrammar->setEnabled(true);
+    ui.actDeleteGrammar->setEnabled(false);
+    ui.actSaveGrammar->setEnabled(false);
+    ui.actSelectAllGrammar->setEnabled(true);
     // 获取所选中的文件名
     QString name = item->text(0);
     // 获取文件所在的绝对路径
@@ -134,6 +372,7 @@ void QtComplierPrinciple::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item,
     // 读取文件的所有文法
     cmdStr = "获取文件: " + name.toStdString() + "的所有文法";
     //cmdVStr.push_back("获取文件: " + name.toStdString() + "的所有文法");
+    grammars = std::vector<Grammar>();
     PUTIL::readGrammar(grammars, filePath);
     // 加载到listWidget中
     for (Grammar g : grammars) {
@@ -147,13 +386,14 @@ void QtComplierPrinciple::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item,
     // 输出到命令行所做的操作
     callCmd(cmdStr);
 }
+// 回调函数
 void QtComplierPrinciple::callCmd(std::string s) {
     std::cout << "\n🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼<界面操作内容>🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼\n\n😀\t" << s << 
                  "\n\n🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼\n";
     std::thread t(Callback::myCallbackFunction);
     t.detach();
 }
-
+// 回调函数
 void QtComplierPrinciple::callCmd(std::vector<std::string>& vs) {
     std::cout << "\n🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼<界面操作内容>🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼\n\n";
     for (std::string s : vs) {
@@ -163,14 +403,23 @@ void QtComplierPrinciple::callCmd(std::vector<std::string>& vs) {
     std::thread t(Callback::myCallbackFunction);
     t.detach();
 }
-
 // listItem的单击事件：选中某项，将其放入到当前项中
 void QtComplierPrinciple::on_listWidget_itemClicked(QListWidgetItem* item){
+    // 开启文法删除操作
+    ui.actDeleteGrammar->setEnabled(true);
+    ui.checkBox->setEnabled(true);
+    ui.checkBox->setChecked(false);
+    ui.textEdit->setEnabled(true);
+    ui.textEdit->setReadOnly(true);
+    ui.actRun->setEnabled(true);
+    // 关闭英文新添加文法导致开启了save动作
+    //ui.actSaveGrammar->setEnabled(false);
+
     // 获取行
     int row = ui.listWidget->row(item);
     // 加载到当前项中
     QString strG = getQStringFromGrammar(grammars[row]);
-    ui.plainTextEdit->setPlainText(strG);
+    ui.textEdit->setPlainText(strG);
     // 打印操作信息到cmd
     cmdVStr.clear();
     Grammar& g = grammars[row];
